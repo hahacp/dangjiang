@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>党建小程序 - 首页优化版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 70px; /* 为底部标签栏留出空间 */
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #e6212e 0%, #b31b25 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header h1 i {
+            margin-right: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .edit-btn {
+            position: absolute;
+            right: 15px;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            color: #e6212e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-title i {
+            margin-right: 10px;
+        }
+        
+        .card-title .more {
+            font-size: 14px;
+            color: #999;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .branch-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .info-item {
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .info-item:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+        
+        .info-item.double {
+            grid-column: span 2;
+        }
+        
+        .info-item .number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e6212e;
+            margin-bottom: 5px;
+        }
+        
+        .info-item .label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .meeting-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .meeting-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .meeting-action:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+        }
+        
+        .meeting-action i {
+            font-size: 28px;
+            color: #e6212e;
+            margin-bottom: 10px;
+        }
+        
+        .meeting-action span {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .meeting-list, .member-list, .honor-list {
+            list-style: none;
+        }
+        
+        .meeting-item, .member-item, .honor-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .meeting-item:hover, .member-item:hover, .honor-item:hover {
+            background: #f9f9f9;
+        }
+        
+        .meeting-item:last-child, .member-item:last-child, .honor-item:last-child {
+            border-bottom: none;
+        }
+        
+        .meeting-info h3, .member-info h3, .honor-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .meeting-info p, .member-info p, .honor-info p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .meeting-type, .member-position, .honor-level, .member-type {
+            display: inline-block;
+            padding: 3px 8px;
+            background: rgba(230, 33, 46, 0.1);
+            color: #e6212e;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 8px;
+        }
+        
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .tab-item.active {
+            color: #e6212e;
+        }
+        
+        .tab-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            position: absolute;
+            left: 15px;
+            top: 20px;
+            cursor: pointer;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #e6212e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #b31b25;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #e6212e;
+            color: #e6212e;
+        }
+        
+        .btn-outline:hover {
+            background-color: #e6212e;
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #e6212e;
+            outline: none;
+        }
+        
+        .template-select {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .template-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template-item:hover {
+            border-color: #e6212e;
+            transform: translateY(-3px);
+        }
+        
+        .template-item.selected {
+            border-color: #e6212e;
+            background-color: rgba(230, 33, 46, 0.05);
+        }
+        
+        .template-item i {
+            font-size: 24px;
+            color: #e6212e;
+            margin-bottom: 10px;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .detail-content {
+            line-height: 1.8;
+        }
+        
+        .detail-section {
+            margin-bottom: 20px;
+        }
+        
+        .detail-section h3 {
+            font-size: 16px;
+            color: #e6212e;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .photo-item {
+            width: 100%;
+            padding-top: 100%; /* 1:1 Aspect Ratio */
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .photo-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            color: #e6212e;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .member-select-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        
+        .member-select-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .member-select-item:last-child {
+            border-bottom: none;
+        }
+        
+        .member-select-item input {
+            margin-right: 10px;
+        }
+        
+        .create-btn-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                padding-bottom: 70px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .branch-info, .meeting-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-item.double {
+                grid-column: span 1;
+            }
+            
+            .template-select {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .photo-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主页 -->
+    <div id="home-page" class="page active">
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-landmark"></i> 党建小程序</h1>
+                <p>加强党的建设，提高党组织活力</p>
+                <button class="edit-btn" onclick="showPage('member-management-page')">
+                    <i class="fas fa-edit"></i> 编辑
+                </button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-info-circle"></i> 支部信息</span>
+                    <span class="more" onclick="showPage('branch-detail-page')">查看详情</span>
+                </h2>
+                
+                <div class="branch-info">
+                    <div class="info-item" onclick="showPage('member-management-page'); setTimeout(() => filterMembers('党员'), 100)">
+                        <div class="number" id="member-count">25</div>
+                        <div class="label">党员人数</div>
+                    </div>
+                    <div class="info-item" onclick="showPage('member-management-page'); setTimeout(() => filterMembers('预备党员'), 100)">
+                        <div class="number" id="probationary-count">5</div>
+                        <div class="label">预备党员</div>
+                    </div>
+                    <div class="info-item" onclick="showPage('member-management-page'); setTimeout(() => filterMembers('发展对象'), 100)">
+                        <div class="number" id="development-count">8</div>
+                        <div class="label">发展对象</div>
+                    </div>
+                    <div class="info-item" onclick="showPage('member-management-page'); setTimeout(() => filterMembers('积极分子'), 100)">
+                        <div class="number" id="activist-count">12</div>
+                        <div class="label">积极分子</div>
+                    </div>
+                    <div class="info-item double" onclick="showPage('honor-list-page')">
+                        <div class="number" id="honor-count">8</div>
+                        <div class="label">支部荣誉</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-calendar-alt"></i> 三会一课</span>
+                    <span class="more" onclick="showPage('meeting-list-page')">查看全部</span>
+                </h2>
+                
+                <div class="meeting-actions">
+                    <div class="meeting-action" onclick="showPage('meeting-create-page')">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>新建会议</span>
+                    </div>
+                    <div class="meeting-action" onclick="showPage('meeting-list-page')">
+                        <i class="fas fa-history"></i>
+                        <span>历史会议</span>
+                    </div>
+                </div>
+                
+                <ul class="meeting-list">
+                    <li class="meeting-item" onclick="showMeetingDetail(1)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">支部大会</span>学习党的二十大精神专题党课</h3>
+                            <p>2023-07-15 | 会议室A | 党支部</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="meeting-item" onclick="showMeetingDetail(2)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">支委会</span>第二季度支部委员会会议</h3>
+                            <p>2023-06-20 | 党员活动室 | 支部委员</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-trophy"></i> 支部荣誉</span>
+                    <span class="more" onclick="showPage('honor-list-page')">查看全部</span>
+                </h2>
+                
+                <ul class="honor-list">
+                    <li class="honor-item" onclick="showHonorDetail(1)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">省级</span>先进基层党组织</h3>
+                            <p>2023-06-30 | 中共XX省委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(2)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">市级</span>党建示范点</h3>
+                            <p>2023-03-15 | 中共XX市委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 党员管理页面 -->
+    <div id="member-management-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('home-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-user-friends"></i> 党员管理</h1>
+                <p>管理支部党员信息</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-users"></i> 党员列表</span>
+                    <span class="more" onclick="showAddMemberModal()">添加党员</span>
+                </h2>
+                
+                <div class="filter-bar">
+                    <div class="filter-btn active" onclick="filterMembers('all')">全部</div>
+                    <div class="filter-btn" onclick="filterMembers('党员')">党员</div>
+                    <div class="filter-btn" onclick="filterMembers('预备党员')">预备党员</div>
+                    <div class="filter-btn" onclick="filterMembers('发展对象')">发展对象</div>
+                    <div class="filter-btn" onclick="filterMembers('积极分子')">积极分子</div>
+                </div>
+                
+                <ul class="member-list" id="member-list">
+                    <li class="member-item">
+                        <div class="member-info">
+                            <h3><span class="member-position">书记</span><span class="member-type">党员</span>张三</h3>
+                            <p>入党时间: 2012-05-15 | 13800138000</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm">编辑</button>
+                            <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                        </div>
+                    </li>
+                    <li class="member-item">
+                        <div class="member-info">
+                            <h3><span class="member-position">委员</span><span class="member-type">党员</span>李四</h3>
+                            <p>入党时间: 2015-08-22 | 13900139000</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm">编辑</button>
+                            <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                        </div>
+                    </li>
+                    <li class="member-item">
+                        <div class="member-info">
+                            <h3><span class="member-type">预备党员</span>王五</h3>
+                            <p>入党时间: 2023-03-10 | 13700137000</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm">编辑</button>
+                            <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                        </div>
+                    </li>
+                    <li class="member-item">
+                        <div class="member-info">
+                            <h3><span class="member-type">发展对象</span>赵六</h3>
+                            <p>确定为发展对象时间: 2023-06-15 | 13600136000</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm">编辑</button>
+                            <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                        </div>
+                    </li>
+                    <li class="member-item">
+                        <div class="member-info">
+                            <h3><span class="member-type">积极分子</span>钱七</h3>
+                            <p>确定为积极分子时间: 2023-08-20 | 13500135000</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm">编辑</button>
+                            <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 支部详情页面 -->
+    <div id="branch-detail-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('home-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-info-circle"></i> 支部详情</h1>
+                <p>查看支部详细信息</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-landmark"></i> 支部基本信息</h2>
+                
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <p><strong>支部名称：</strong>XX单位党支部</p>
+                        <p><strong>成立时间：</strong>2010-05-01</p>
+                        <p><strong>支部书记：</strong>张三</p>
+                        <p><strong>支部委员：</strong>李四、王五、赵六</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>党员统计</h3>
+                        <p><strong>党员总数：</strong><span id="detail-member-count">25</span>人</p>
+                        <p><strong>正式党员：</strong>20人</p>
+                        <p><strong>预备党员：</strong>5人</p>
+                        <p><strong>发展对象：</strong>8人</p>
+                        <p><strong>积极分子：</strong>12人</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>荣誉统计</h3>
+                        <p><strong>支部荣誉总数：</strong><span id="detail-honor-count">8</span>项</p>
+                        <p><strong>国家级荣誉：</strong>2项</p>
+                        <p><strong>省级荣誉：</strong>3项</p>
+                        <p><strong>市级荣誉：</strong>3项</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 三会一课列表页 -->
+    <div id="meeting-list-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('home-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-list-alt"></i> 三会一课记录</h1>
+                <p>查看所有会议记录</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-history"></i> 历史记录</span>
+                    <span class="more" onclick="showPage('meeting-create-page')">新建记录</span>
+                </h2>
+                
+                <div class="filter-bar">
+                    <div class="filter-btn active" onclick="filterMeetings('all')">全部</div>
+                    <div class="filter-btn" onclick="filterMeetings('支部大会')">支部大会</div>
+                    <div class="filter-btn" onclick="filterMeetings('支委会')">支委会</div>
+                    <div class="filter-btn" onclick="filterMeetings('党小组会')">党小组会</div>
+                    <div class="filter-btn" onclick="filterMeetings('党课')">党课</div>
+                </div>
+                
+                <ul class="meeting-list">
+                    <li class="meeting-item" onclick="showMeetingDetail(1)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">支部大会</span>学习党的二十大精神专题党课</h3>
+                            <p>2023-07-15 | 会议室A | 党支部</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="meeting-item" onclick="showMeetingDetail(2)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">支委会</span>第二季度支部委员会会议</h3>
+                            <p>2023-06-20 | 党员活动室 | 支部委员</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="meeting-item" onclick="showMeetingDetail(3)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">党小组会</span>第一党小组月度会议</h3>
+                            <p>2023-06-10 | 小会议室 | 第一党小组</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="meeting-item" onclick="showMeetingDetail(4)">
+                        <div class="meeting-info">
+                            <h3><span class="meeting-type">党课</span>党史学习教育专题党课</h3>
+                            <p>2023-05-25 | 党员活动室 | 全体党员</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 荣誉列表页面 -->
+    <div id="honor-list-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('home-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-trophy"></i> 支部荣誉</h1>
+                <p>查看支部所有荣誉</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title">
+                    <span><i class="fas fa-award"></i> 荣誉列表</span>
+                    <span class="more" onclick="showAddHonorModal()">添加荣誉</span>
+                </h2>
+                
+                <ul class="honor-list">
+                    <li class="honor-item" onclick="showHonorDetail(1)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">国家级</span>全国先进基层党组织</h3>
+                            <p>2022-07-01 | 中共中央</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(2)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">国家级</span>全国五一劳动奖状</h3>
+                            <p>2021-04-28 | 中华全国总工会</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(3)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">省级</span>先进基层党组织</h3>
+                            <p>2023-06-30 | 中共XX省委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(4)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">省级</span>文明单位</h3>
+                            <p>2022-12-15 | 中共XX省委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(5)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">省级</span>工人先锋号</h3>
+                            <p>2021-04-30 | XX省总工会</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(6)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">市级</span>党建示范点</h3>
+                            <p>2023-03-15 | 中共XX市委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(7)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">市级</span>先进基层党组织</h3>
+                            <p>2022-06-30 | 中共XX市委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                    <li class="honor-item" onclick="showHonorDetail(8)">
+                        <div class="honor-info">
+                            <h3><span class="honor-level">市级</span>五四红旗团支部</h3>
+                            <p>2021-05-04 | 共青团XX市委</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-chevron-right" style="color: #999;"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 荣誉详情页面 -->
+    <div id="honor-detail-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('honor-list-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-trophy"></i> 荣誉详情</h1>
+                <p>查看荣誉详细信息</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title" id="honor-detail-title">全国先进基层党组织</h2>
+                
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <h3>荣誉信息</h3>
+                        <p><strong>荣誉名称：</strong><span id="honor-detail-name">全国先进基层党组织</span></p>
+                        <p><strong>授予单位：</strong><span id="honor-detail-org">中共中央</span></p>
+                        <p><strong>授予时间：</strong><span id="honor-detail-date">2022-07-01</span></p>
+                        <p><strong>荣誉级别：</strong><span id="honor-detail-level">国家级</span></p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>荣誉描述</h3>
+                        <p id="honor-detail-desc">该支部在党建工作方面表现突出，充分发挥了战斗堡垒作用，党员先锋模范作用明显，各项工作取得了显著成效，被中共中央授予"全国先进基层党组织"荣誉称号。</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>荣誉照片</h3>
+                        <div class="photo-gallery">
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=荣誉证书" alt="荣誉证书">
+                            </div>
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=颁奖现场" alt="颁奖现场">
+                            </div>
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=荣誉牌匾" alt="荣誉牌匾">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> 编辑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 创建三会一课页面 -->
+    <div id="meeting-create-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('home-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-plus-circle"></i> 创建会议记录</h1>
+                <p>新增三会一课记录</p>
+            </div>
+
+            <div class="create-btn-container">
+                <button class="btn"><i class="fas fa-plus"></i> 新建记录</button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-edit"></i> 会议信息</h2>
+                
+                <div class="form-group">
+                    <label for="meetingType">会议类型</label>
+                    <select class="form-control" id="meetingType">
+                        <option value="">请选择会议类型</option>
+                        <option value="支部党员大会">支部党员大会</option>
+                        <option value="支部委员会">支部委员会</option>
+                        <option value="党小组会">党小组会</option>
+                        <option value="党课">党课</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="meetingTitle">会议主题</label>
+                    <input type="text" class="form-control" id="meetingTitle" placeholder="请输入会议主题">
+                </div>
+                
+                <div class="form-group">
+                    <label for="meetingDate">会议时间</label>
+                    <input type="datetime-local" class="form-control" id="meetingDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="meetingLocation">会议地点</label>
+                    <input type="text" class="form-control" id="meetingLocation" placeholder="请输入会议地点">
+                </div>
+                
+                <div class="form-group">
+                    <label>参会人员</label>
+                    <div class="form-control" style="min-height: 60px; cursor: pointer;" onclick="showMemberSelectModal()">
+                        <div id="selected-members">请选择参会人员</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>会议模板</label>
+                    <div class="template-select">
+                        <div class="template-item" data-template="standard" onclick="selectTemplate('standard')">
+                            <i class="fas fa-file-alt"></i>
+                            <p>标准模板</p>
+                        </div>
+                        <div class="template-item" data-template="accept" onclick="selectTemplate('accept')">
+                            <i class="fas fa-user-plus"></i>
+                            <p>接受预备党员</p>
+                        </div>
+                        <div class="template-item" data-template="transfer" onclick="selectTemplate('transfer')">
+                            <i class="fas fa-user-check"></i>
+                            <p>预备党员转正</p>
+                        </div>
+                        <div class="template-item" data-template="study" onclick="selectTemplate('study')">
+                            <i class="fas fa-users"></i>
+                            <p>学习模板</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="meetingContent">会议内容</label>
+                    <textarea class="form-control" id="meetingContent" rows="8" placeholder="请填写会议内容或选择模板自动生成"></textarea>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-outline"><i class="fas fa-save"></i> 保存草稿</button>
+                    <button class="btn"><i class="fas fa-check"></i> 提交记录</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 会议详情页面 -->
+    <div id="meeting-detail-page" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="showPage('meeting-list-page')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1><i class="fas fa-file-alt"></i> 会议详情</h1>
+                <p>查看会议记录详情</p>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title" id="detailTitle">学习党的二十大精神专题党课</h2>
+                
+                <div class="detail-content">
+                    <div class="detail-section">
+                        <h3>会议信息</h3>
+                        <p><strong>会议类型：</strong><span id="detailType">支部党员大会</span></p>
+                        <p><strong>会议时间：</strong><span id="detailDate">2023-07-15 14:30</span></p>
+                        <p><strong>会议地点：</strong><span id="detailLocation">会议室A</span></p>
+                        <p><strong>参会人员：</strong><span id="detailParticipants">张三、李四、王五、赵六等25人</span></p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>会议内容</h3>
+                        <p id="detailContent">本次支部党员大会主要学习了党的二十大精神。会议由支部书记主持，全体党员参加。会议深入学习了党的二十大报告的重要内容，特别是关于新时代中国特色社会主义思想的核心要义。与会党员积极发言，交流学习心得，表示要将党的二十大精神贯彻落实到实际工作中，为公司发展贡献力量。</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>会议照片</h3>
+                        <div class="photo-gallery">
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=会议照片1" alt="会议照片">
+                            </div>
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=会议照片2" alt="会议照片">
+                            </div>
+                            <div class="photo-item">
+                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=会议照片3" alt="会议照片">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-outline"><i class="fas fa-edit"></i> 编辑记录</button>
+                    <button class="btn"><i class="fas fa-file-word"></i> 导出Word</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加党员模态框 -->
+    <div id="add-member-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">添加党员</h3>
+                <button class="close-btn" onclick="closeModal('add-member-modal')">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="memberName">姓名</label>
+                <input type="text" class="form-control" id="memberName" placeholder="请输入姓名">
+            </div>
+            
+            <div class="form-group">
+                <label for="memberPosition">职务</label>
+                <select class="form-control" id="memberPosition">
+                    <option value="">请选择职务</option>
+                    <option value="书记">书记</option>
+                    <option value="委员">委员</option>
+                    <option value="普通党员">普通党员</option>
+                    <option value="无">无</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="memberType">类型</label>
+                <select class="form-control" id="memberType">
+                    <option value="党员">党员</option>
+                    <option value="预备党员">预备党员</option>
+                    <option value="发展对象">发展对象</option>
+                    <option value="积极分子">积极分子</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="memberJoinDate">入党时间/确定时间</label>
+                <input type="date" class="form-control" id="memberJoinDate">
+            </div>
+            
+            <div class="form-group">
+                <label for="memberPhone">手机号码</label>
+                <input type="tel" class="form-control" id="memberPhone" placeholder="请输入手机号码">
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-outline" onclick="closeModal('add-member-modal')">取消</button>
+                <button class="btn" onclick="addMember()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加荣誉模态框 -->
+    <div id="add-honor-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">添加荣誉</h3>
+                <button class="close-btn" onclick="closeModal('add-honor-modal')">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="honorName">荣誉名称</label>
+                <input type="text" class="form-control" id="honorName" placeholder="请输入荣誉名称">
+            </div>
+            
+            <div class="form-group">
+                <label for="honorOrg">授予单位</label>
+                <input type="text" class="form-control" id="honorOrg" placeholder="请输入授予单位">
+            </div>
+            
+            <div class="form-group">
+                <label for="honorDate">授予时间</label>
+                <input type="date" class="form-control" id="honorDate">
+            </div>
+            
+            <div class="form-group">
+                <label for="honorLevel">荣誉级别</label>
+                <select class="form-control" id="honorLevel">
+                    <option value="国家级">国家级</option>
+                    <option value="省级">省级</option>
+                    <option value="市级">市级</option>
+                    <option value="区级">区级</option>
+                    <option value="单位">单位</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="honorImage">荣誉照片</label>
+                <input type="file" class="form-control" id="honorImage">
+            </div>
+            
+            <div class="form-group">
+                <label for="honorDesc">荣誉描述</label>
+                <textarea class="form-control" id="honorDesc" rows="4" placeholder="请输入荣誉描述"></textarea>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-outline" onclick="closeModal('add-honor-modal')">取消</button>
+                <button class="btn" onclick="addHonor()">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 选择参会人员模态框 -->
+    <div id="member-select-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">选择参会人员</h3>
+                <button class="close-btn" onclick="closeModal('member-select-modal')">&times;</button>
+            </div>
+            
+            <div class="member-select-list" id="member-select-list">
+                <div class="member-select-item">
+                    <input type="checkbox" id="member1" value="张三">
+                    <label for="member1">张三（书记）</label>
+                </div>
+                <div class="member-select-item">
+                    <input type="checkbox" id="member2" value="李四">
+                    <label for="member2">李四（委员）</label>
+                </div>
+                <div class="member-select-item">
+                    <input type="checkbox" id="member3" value="王五">
+                    <label for="member3">王五（预备党员）</label>
+                </div>
+                <div class="member-select-item">
+                    <input type="checkbox" id="member4" value="赵六">
+                    <label for="member4">赵六（发展对象）</label>
+                </div>
+                <div class="member-select-item">
+                    <input type="checkbox" id="member5" value="钱七">
+                    <label for="member5">钱七（积极分子）</label>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-outline" onclick="closeModal('member-select-modal')">取消</button>
+                <button class="btn" onclick="confirmSelectedMembers()">确定</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部导航栏 -->
+    <div class="tab-bar">
+        <div class="tab-item active" onclick="showPage('home-page')">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="tab-item" onclick="showPage('meeting-list-page')">
+            <i class="fas fa-calendar-alt"></i>
+            <span>三会一课</span>
+        </div>
+        <div class="tab-item" onclick="showPage('member-management-page')">
+            <i class="fas fa-user-friends"></i>
+            <span>党员管理</span>
+        </div>
+        <div class="tab-item" onclick="showPage('honor-list-page')">
+            <i class="fas fa-trophy"></i>
+            <span>支部荣誉</span>
+        </div>
+        <div class="tab-item">
+            <i class="fas fa-robot"></i>
+            <span>党建大模型</span>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        let members = [
+            { id: 1, name: "张三", position: "书记", type: "党员", joinDate: "2012-05-15", phone: "13800138000" },
+            { id: 2, name: "李四", position: "委员", type: "党员", joinDate: "2015-08-22", phone: "13900139000" },
+            { id: 3, name: "王五", position: "", type: "预备党员", joinDate: "2023-03-10", phone: "13700137000" },
+            { id: 4, name: "赵六", position: "", type: "发展对象", joinDate: "2023-06-15", phone: "13600136000" },
+            { id: 5, name: "钱七", position: "", type: "积极分子", joinDate: "2023-08-20", phone: "13500135000" }
+        ];
+        
+        let honors = [
+            { id: 1, name: "全国先进基层党组织", org: "中共中央", date: "2022-07-01", level: "国家级", desc: "该支部在党建工作方面表现突出，充分发挥了战斗堡垒作用，党员先锋模范作用明显，各项工作取得了显著成效，被中共中央授予'全国先进基层党组织'荣誉称号。" },
+            { id: 2, name: "全国五一劳动奖状", org: "中华全国总工会", date: "2021-04-28", level: "国家级", desc: "该支部所在单位在生产经营、改革发展、服务社会等方面取得了突出成绩，被中华全国总工会授予'全国五一劳动奖状'。" },
+            { id: 3, name: "先进基层党组织", org: "中共XX省委", date: "2023-06-30", level: "省级", desc: "该支部党建工作扎实有效，党员队伍素质优良，工作机制健全完善，服务群众成效显著，被中共XX省委授予'先进基层党组织'荣誉称号。" },
+            { id: 4, name: "文明单位", org: "XX省精神文明建设指导委员会", date: "2022-12-15", level: "省级", desc: "该支部所在单位精神文明建设成效显著，干部职工思想道德素质高，业务工作实绩突出，被XX省精神文明建设指导委员会授予'文明单位'称号。" },
+            { id: 5, name: "工人先锋号", org: "XX省总工会", date: "2021-04-30", level: "省级", desc: "该支部所在集体在工作中表现突出，业绩显著，被XX省总工会授予'工人先锋号'荣誉称号。" },
+            { id: 6, name: "党建示范点", org: "中共XX市委", date: "2023-03-15", level: "市级", desc: "该支部党建工作规范，特色鲜明，成效显著，被中共XX市委确定为'党建示范点'。" },
+            { id: 7, name: "先进基层党组织", org: "中共XX市委", date: "2022-06-30", level: "市级", desc: "该支部党建工作扎实，党员作用突出，服务群众成效显著，被中共XX市委授予'先进基层党组织'荣誉称号。" },
+            { id: 8, name: "五四红旗团支部", org: "共青团XX市委", date: "2021-05-04", level: "市级", desc: "该支部共青团工作活跃，青年作用发挥明显，被共青团XX市委授予'五四红旗团支部'荣誉称号。" }
+        ];
+        
+        // 页面切换函数
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // 更新底部导航栏活动状态
+            if (pageId === 'home-page') {
+                updateTabActive(0);
+            } else if (pageId === 'meeting-list-page' || pageId === 'meeting-create-page' || pageId === 'meeting-detail-page') {
+                updateTabActive(1);
+            } else if (pageId === 'member-management-page') {
+                updateTabActive(2);
+            } else if (pageId === 'honor-list-page' || pageId === 'honor-detail-page') {
+                updateTabActive(3);
+            }
+        }
+        
+        // 更新底部导航栏活动状态
+        function updateTabActive(index) {
+            document.querySelectorAll('.tab-item').forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // 显示会议详情
+        function showMeetingDetail(meetingId) {
+            // 模拟从服务器获取会议详情数据
+            const meetings = {
+                1: {
+                    title: "学习党的二十大精神专题党课",
+                    type: "支部党员大会",
+                    date: "2023-07-15 14:30",
+                    location: "会议室A",
+                    participants: "张三、李四、王五、赵六等25人",
+                    content: "本次支部党员大会主要学习了党的二十大精神。会议由支部书记主持，全体党员参加。会议深入学习了党的二十大报告的重要内容，特别是关于新时代中国特色社会主义思想的核心要义。与会党员积极发言，交流学习心得，表示要将党的二十大精神贯彻落实到实际工作中，为公司发展贡献力量。"
+                },
+                2: {
+                    title: "第二季度支部委员会会议",
+                    type: "支委会",
+                    date: "2023-06-20 15:00",
+                    location: "党员活动室",
+                    participants: "张三、李四、王五、赵六",
+                    content: "本次支部委员会会议讨论了第二季度党建工作总结和第三季度工作计划。会议审议通过了上半年党员发展计划，研究了主题党日活动方案，并对近期重点工作进行了部署。"
+                },
+                3: {
+                    title: "第一党小组月度会议",
+                    type: "党小组会",
+                    date: "2023-06-10 13:30",
+                    location: "小会议室",
+                    participants: "张三、李四、王五",
+                    content: "本次党小组会集中学习了《党章》相关内容，讨论了如何更好地发挥党员先锋模范作用。小组成员结合工作实际，交流了心得体会，并提出了改进工作的建议。"
+                },
+                4: {
+                    title: "党史学习教育专题党课",
+                    type: "党课",
+                    date: "2023-05-25 14:00",
+                    location: "党员活动室",
+                    participants: "全体党员",
+                    content: "本次党课由支部书记主讲，主题为'学习党史，牢记使命'。课程回顾了党的百年奋斗历程，强调了学习党史的重要性，引导党员从党的历史中汲取智慧和力量，更好地履行党员职责。"
+                }
+            };
+            
+            const meeting = meetings[meetingId];
+            if (meeting) {
+                document.getElementById('detailTitle').textContent = meeting.title;
+                document.getElementById('detailType').textContent = meeting.type;
+                document.getElementById('detailDate').textContent = meeting.date;
+                document.getElementById('detailLocation').textContent = meeting.location;
+                document.getElementById('detailParticipants').textContent = meeting.participants;
+                document.getElementById('detailContent').textContent = meeting.content;
+                
+                showPage('meeting-detail-page');
+            }
+        }
+        
+        // 显示荣誉详情
+        function showHonorDetail(honorId) {
+            const honor = honors.find(h => h.id === honorId);
+            if (honor) {
+                document.getElementById('honor-detail-title').textContent = honor.name;
+                document.getElementById('honor-detail-name').textContent = honor.name;
+                document.getElementById('honor-detail-org').textContent = honor.org;
+                document.getElementById('honor-detail-date').textContent = honor.date;
+                document.getElementById('honor-detail-level').textContent = honor.level;
+                document.getElementById('honor-detail-desc').textContent = honor.desc;
+                
+                showPage('honor-detail-page');
+            }
+        }
+        
+        // 显示添加党员模态框
+        function showAddMemberModal() {
+            document.getElementById('add-member-modal').classList.add('active');
+        }
+        
+        // 显示添加荣誉模态框
+        function showAddHonorModal() {
+            document.getElementById('add-honor-modal').classList.add('active');
+        }
+        
+        // 显示选择参会人员模态框
+        function showMemberSelectModal() {
+            document.getElementById('member-select-modal').classList.add('active');
+        }
+        
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // 添加党员
+        function addMember() {
+            const name = document.getElementById('memberName').value;
+            const position = document.getElementById('memberPosition').value;
+            const type = document.getElementById('memberType').value;
+            const joinDate = document.getElementById('memberJoinDate').value;
+            const phone = document.getElementById('memberPhone').value;
+            
+            if (!name) {
+                alert('请输入姓名');
+                return;
+            }
+            
+            // 添加到数据数组
+            const newMember = {
+                id: members.length + 1,
+                name,
+                position,
+                type,
+                joinDate,
+                phone
+            };
+            members.push(newMember);
+            
+            // 更新UI
+            const memberList = document.getElementById('member-list');
+            const newMemberElement = document.createElement('li');
+            newMemberElement.className = 'member-item';
+            
+            let positionHtml = position ? `<span class="member-position">${position}</span>` : '';
+            
+            newMemberElement.innerHTML = `
+                <div class="member-info">
+                    <h3>${positionHtml}<span class="member-type">${type}</span>${name}</h3>
+                    <p>${type}时间: ${joinDate} | ${phone}</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline btn-sm">编辑</button>
+                    <button class="btn btn-outline btn-sm" style="margin-left: 5px;">删除</button>
+                </div>
+            `;
+            
+            memberList.appendChild(newMemberElement);
+            
+            // 更新支部信息统计
+            updateBranchInfo();
+            
+            // 关闭模态框并清空表单
+            closeModal('add-member-modal');
+            document.getElementById('memberName').value = '';
+            document.getElementById('memberPosition').value = '';
+            document.getElementById('memberJoinDate').value = '';
+            document.getElementById('memberPhone').value = '';
+            
+            alert('党员添加成功！');
+        }
+        
+        // 添加荣誉
+        function addHonor() {
+            const name = document.getElementById('honorName').value;
+            const org = document.getElementById('honorOrg').value;
+            const date = document.getElementById('honorDate').value;
+            const level = document.getElementById('honorLevel').value;
+            const desc = document.getElementById('honorDesc').value;
+            
+            if (!name) {
+                alert('请输入荣誉名称');
+                return;
+            }
+            
+            // 添加到数据数组
+            const newHonor = {
+                id: honors.length + 1,
+                name,
+                org,
+                date,
+                level,
+                desc
+            };
+            honors.push(newHonor);
+            
+            // 更新支部信息统计
+            updateBranchInfo();
+            
+            // 关闭模态框并清空表单
+            closeModal('add-honor-modal');
+            document.getElementById('honorName').value = '';
+            document.getElementById('honorOrg').value = '';
+            document.getElementById('honorDate').value = '';
+            document.getElementById('honorDesc').value = '';
+            
+            alert('荣誉添加成功！');
+            
+            // 刷新荣誉列表页面
+            showPage('honor-list-page');
+        }
+        
+        // 更新支部信息统计
+        function updateBranchInfo() {
+            // 计算各类人员数量
+            const memberCount = members.filter(m => m.type === '党员').length;
+            const probationaryCount = members.filter(m => m.type === '预备党员').length;
+            const developmentCount = members.filter(m => m.type === '发展对象').length;
+            const activistCount = members.filter(m => m.type === '积极分子').length;
+            
+            // 更新UI
+            document.getElementById('member-count').textContent = memberCount;
+            document.getElementById('probationary-count').textContent = probationaryCount;
+            document.getElementById('development-count').textContent = developmentCount;
+            document.getElementById('activist-count').textContent = activistCount;
+            document.getElementById('detail-member-count').textContent = memberCount;
+            document.getElementById('honor-count').textContent = honors.length;
+            document.getElementById('detail-honor-count').textContent = honors.length;
+        }
+        
+        // 选择会议模板
+        function selectTemplate(templateType) {
+            // 移除所有模板的选中状态
+            document.querySelectorAll('.template-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 设置当前选中的模板
+            document.querySelector(`.template-item[data-template="${templateType}"]`).classList.add('selected');
+            
+            // 生成模板内容
+            let content = '';
+            
+            switch(templateType) {
+                case 'accept':
+                    content = '今天我们支部召开支部党员大会，主要讨论接受XXX等同志为预备党员事宜。\n\n';
+                    content += '大会应到有表决权正式党员X名，实到X名，符合规定人数。\n\n';
+                    content += '会议按照程序进行：\n1. 发展对象XXX等同志汇报对党的认识、入党动机、本人履历等情况；\n2. 入党介绍人介绍发展对象有关情况，并对其能否入党表明意见；\n3. 支委会报告对发展对象的审查情况；\n4. 与会党员发表意见，对发展对象能否入党进行充分讨论；\n5. 与会正式党员采取无记名投票方式进行表决。\n\n';
+                    content += '根据投票结果，大会一致同意接收XXX等同志为中共预备党员。';
+                    break;
+                    
+                case 'transfer':
+                    content = '今天我们支部召开支部党员大会，主要讨论XXX等同志预备党员转正事宜。\n\n';
+                    content += '大会应到有表决权正式党员X名，实到X名，符合规定人数。\n\n';
+                    content += '会议按照程序进行：\n1. 预备党员XXX等同志汇报预备期间的思想、工作情况；\n2. 党小组介绍预备党员在预备期间的表现情况和小组意见；\n3. 支委会介绍对预备党员在预备期间的教育和考察情况，提出能否转为正式党员的意见；\n4. 与会党员发表意见，对预备党员能否转正进行充分讨论；\n5. 与会正式党员采取无记名投票方式进行表决。\n\n';
+                    content += '根据投票结果，大会一致同意XXX等同志按期转为中共正式党员。';
+                    break;
+                    
+                case 'standard':
+                    content = '本次会议于XXXX年XX月XX日在XXXX召开。\n\n';
+                    content += '会议主要内容：\n1. 学习上级党组织有关文件精神；\n2. 讨论近期重点工作；\n3. 研究部署下一阶段工作任务。\n\n';
+                    content += '与会同志积极发言，充分讨论，形成了统一意见。';
+                    break;
+                    
+                case 'study':
+                    content = '本次学习会议于XXXX年XX月XX日在XXXX召开。\n\n';
+                    content += '学习主题：XXXX\n\n';
+                    content += '学习内容：\n1. 学习习近平新时代中国特色社会主义思想；\n2. 学习党的二十大精神；\n3. 学习党章党规。\n\n';
+                    content += '通过学习，进一步提高了党员同志的政治理论水平和党性修养。';
+                    break;
+            }
+            
+            document.getElementById('meetingContent').value = content;
+        }
+        
+        // 确认选择的参会人员
+        function confirmSelectedMembers() {
+            const selectedMembers = [];
+            document.querySelectorAll('#member-select-list input:checked').forEach(input => {
+                selectedMembers.push(input.value);
+            });
+            
+            if (selectedMembers.length > 0) {
+                document.getElementById('selected-members').textContent = selectedMembers.join('、');
+            } else {
+                document.getElementById('selected-members').textContent = '请选择参会人员';
+            }
+            
+            closeModal('member-select-modal');
+        }
+        
+        // 筛选成员
+        function filterMembers(type) {
+            const filterBtns = document.querySelectorAll('.filter-bar .filter-btn');
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const memberItems = document.querySelectorAll('.member-item');
+            memberItems.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    const memberType = item.querySelector('.member-type').textContent;
+                    if (memberType === type) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // 筛选会议
+        function filterMeetings(type) {
+            const filterBtns = document.querySelectorAll('.filter-bar .filter-btn');
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const meetingItems = document.querySelectorAll('.meeting-item');
+            meetingItems.forEach(item => {
+                if (type === 'all') {
+                    item.style.display = 'flex';
+                } else {
+                    const meetingType = item.querySelector('.meeting-type').textContent;
+                    if (meetingType === type) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                }
+            });
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置当前日期时间为默认值
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            
+            document.getElementById('meetingDate').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            
+            // 更新支部信息统计
+            updateBranchInfo();
+        });
+    </script>
+</body>
+</html>
