@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>党建小程序 - 界面美化版</title>
@@ -1113,16 +1115,13 @@
                             <div class="photo-item">
                                 <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=会议照片2" alt="会议照片">
                             </div>
-                            <div class="photo-item">
-                                <img src="https://via.placeholder.com/150/FF0000/FFFFFF?text=会议照片3" alt="会议照片">
-                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="actions">
                     <button class="btn btn-outline"><i class="fas fa-edit"></i> 编辑记录</button>
-                    <button class="btn"><i class="fas fa-file-word"></i> 导出Word</button>
+                    <button class="btn" onclick="exportWord()"><i class="fas fa-file-word"></i> 导出Word</button>
                 </div>
             </div>
         </div>
@@ -1647,6 +1646,38 @@
             });
         }
         
+      function exportWord() {
+          const content = document.querySelector('#meeting-detail-page .detail-content');
+          const clone   = content.cloneNode(true);
+          clone.querySelectorAll('img').forEach(img => { img.outerHTML = `<p style="color:#999;font-size:12px">[${img.alt || '会议照片'}]</p>`;
+  });
+          const html = `
+         <!DOCTYPE html>
+         <html>
+         <head><meta charset="utf-8"><title>会议记录</title></head>
+         <body style="font-family:'Microsoft YaHei';margin:20px;line-height:1.8">
+              ${clone.innerHTML}
+         </body>
+         </html>`;
+         const blob = htmlDocx.asBlob(html);
+         /* ===== 移动端兼容下载 ===== */
+         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+         // WP Edge
+            window.navigator.msSaveOrOpenBlob(blob, `会议记录-${new Date().toLocaleDateString()}.docx`);
+         } else {
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href     = url;
+        a.download = `会议记录-${new Date().toLocaleDateString()}.docx`;
+        document.body.appendChild(a);
+        a.click();          // 触发下载
+        setTimeout(() => {
+        URL.revokeObjectURL(url);
+       a.remove();
+       }, 2000);
+      }
+    }
+
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             // 设置当前日期时间为默认值
